@@ -53,4 +53,14 @@ CREATE TABLE eligibility_checks (
   result text,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+CREATE TABLE eligibility_checks (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id uuid REFERENCES auth.users,
+  age integer,
+  is_citizen boolean,
+  state text,
+  result text,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
 ```
