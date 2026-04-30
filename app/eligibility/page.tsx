@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { supabase } from "@/lib/supabase";
 import { JourneyMap } from "@/components/JourneyMap";
 import { ChevronRight, ChevronLeft, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
@@ -42,8 +41,13 @@ export default function EligibilityPage() {
     setResult(finalResult);
 
     try {
-      await supabase.from("eligibility_checks").insert([
+      const { createBrowserSupabaseClient } = await import("@/lib/supabase");
+      const supabaseClient = createBrowserSupabaseClient();
+      const { data: { session } } = await supabaseClient.auth.getSession();
+
+      await supabaseClient.from("eligibility_checks").insert([
         {
+          user_id: session?.user.id ?? null,
           age: age || null,
           is_citizen: formData.citizenship === "Yes",
           state: formData.state,
