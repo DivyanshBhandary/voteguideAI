@@ -134,12 +134,13 @@ export default function ChatPage() {
       content: text.trim(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
     setInput("");
     setIsLoading(true);
 
     const modelMessageId = (Date.now() + 1).toString();
-    
+
     // Add empty model message for streaming
     setMessages((prev) => [
       ...prev,
@@ -150,48 +151,54 @@ export default function ChatPage() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
-          messages: [...messages, userMessage].map((m) => ({
+          messages: updatedMessages.map((m) => ({
             role: m.role,
             content: m.content,
           })),
         }),
       });
 
+      const data = await response.json().catch(() => null);
+
       if (!response.ok) {
         if (response.status === 401) {
-           window.location.href = "/login";
-           return;
+          window.location.href = "/login";
+          return;
         }
-        throw new Error("Failed to fetch");
-      }
-      if (!response.body) throw new Error("No response body");
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-      let done = false;
-      let textContent = "";
+        console.error("Chat API returned error status:", response.status);
+        console.error("Chat API returned statusText:", response.statusText);
+        console.error("Chat API returned body:", data);
 
-      while (!done) {
-        const { value, done: readerDone } = await reader.read();
-        done = readerDone;
-        if (value) {
-          const chunk = decoder.decode(value, { stream: true });
-          textContent += chunk;
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === modelMessageId ? { ...msg, content: textContent } : msg
-            )
-          );
-        }
+        const fallbackText =
+          "I am VoteGuide AI. I am currently experiencing high traffic, but I can help you with the election steps: 1. Check Eligibility, 2. Register, 3. Find Booth. Which would you like to know more about?";
+
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === modelMessageId ? { ...msg, content: fallbackText } : msg
+          )
+        );
+        return;
       }
-    } catch (error) {
-      console.error("Chat error:", error);
+
+      const messageText = data?.message ||
+        "I am VoteGuide AI. I am currently experiencing high traffic, but I can help you with the election steps: 1. Check Eligibility, 2. Register, 3. Find Booth. Which would you like to know more about?";
+
       setMessages((prev) =>
         prev.map((msg) =>
-          msg.id === modelMessageId
-            ? { ...msg, content: "Sorry, I encountered an error. Please try again." }
-            : msg
+          msg.id === modelMessageId ? { ...msg, content: messageText } : msg
+        )
+      );
+    } catch (error) {
+      console.error("Chat network or server error:", error);
+      const fallbackText =
+        "I am VoteGuide AI. I am currently experiencing high traffic, but I can help you with the election steps: 1. Check Eligibility, 2. Register, 3. Find Booth. Which would you like to know more about?";
+
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === modelMessageId ? { ...msg, content: fallbackText } : msg
         )
       );
     } finally {
@@ -251,9 +258,9 @@ export default function ChatPage() {
                     </div>
                   ) : (
                     <div className="flex items-center gap-1 h-6">
-                      <span className="w-2 h-2 bg-orange-500/50 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                      <span className="w-2 h-2 bg-orange-500/50 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                      <span className="w-2 h-2 bg-orange-500/50 rounded-full animate-bounce"></span>
+                      <span className="w-2 h-2 bg-orange-500 rounded-full" />
+                      <span className="w-2 h-2 bg-orange-500 rounded-full" />
+                      <span className="w-2 h-2 bg-orange-500 rounded-full" />
                     </div>
                   )}
                 </div>

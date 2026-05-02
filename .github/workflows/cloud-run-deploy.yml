@@ -1,0 +1,50 @@
+name: Build and Deploy to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          export_default_credentials: true
+
+      - run: gcloud config set run/region us-central1
+      - run: gcloud config set run/platform managed
+
+      - run: gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/voteguide-ai
+
+      - run: |
+          python - <<'PY'
+          from pathlib import Path
+          import os
+          manifest = Path('service.yaml').read_text()
+          manifest = manifest.replace('${PROJECT_ID}', os.environ['GCP_PROJECT_ID'])
+          Path('service.deployed.yaml').write_text(manifest)
+          PY
+
+      - run: |
+          gcloud run services replace service.deployed.yaml \
+            --region us-central1 \
+            --platform managed
+
+      - run: |
+          gcloud run services add-iam-policy-binding voteguide-ai \
+            --region us-central1 \
+            --member="allUsers" \
+            --role="roles/run.invoker"

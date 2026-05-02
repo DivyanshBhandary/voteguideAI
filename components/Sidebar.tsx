@@ -17,7 +17,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 border-r border-zinc-800 bg-zinc-950 hidden md:block h-[calc(100vh-4rem)] sticky top-16">
+    <aside className="w-64 border-r bg-white/90 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50 border-zinc-200/70 dark:border-zinc-800 hidden md:block h-[calc(100vh-4rem)] sticky top-16">
       <div className="flex flex-col h-full py-6 px-4">
         <div className="space-y-2 flex-1">
           {navItems.map((item) => {
@@ -35,7 +35,9 @@ export function Sidebar() {
                   />
                 )}
                 <div className={`relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  isActive ? "text-orange-500" : "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/50"
+                  isActive
+                    ? "text-orange-500"
+                    : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-900/50"
                 }`}>
                   <Icon className="w-5 h-5" />
                   {item.name}

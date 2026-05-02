@@ -1,10 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-if (!process.env.GEMINI_API_KEY) {
-  throw new Error("Missing GEMINI_API_KEY environment variable");
+const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
+if (!apiKey) {
+  throw new Error("Missing GOOGLE_GENERATIVE_AI_API_KEY environment variable");
 }
 
-export const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+export const genAI = new GoogleGenerativeAI(apiKey);
 
 export const getGeminiModel = () => {
   return genAI.getGenerativeModel({

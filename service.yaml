@@ -1,0 +1,35 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: voteguide-ai
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - image: gcr.io/${PROJECT_ID}/voteguide-ai:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
+            - name: NEXT_PUBLIC_SUPABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  secret: NEXT_PUBLIC_SUPABASE_URL
+                  key: latest
+            - name: NEXT_PUBLIC_SUPABASE_ANON_KEY
+              valueFrom:
+                secretKeyRef:
+                  secret: NEXT_PUBLIC_SUPABASE_ANON_KEY
+                  key: latest
+            - name: GOOGLE_GENERATIVE_AI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  secret: GOOGLE_GENERATIVE_AI_API_KEY
+                  key: latest
+      containerConcurrency: 80
+      timeoutSeconds: 300
+  traffic:
+    - latestRevision: true
+      percent: 100

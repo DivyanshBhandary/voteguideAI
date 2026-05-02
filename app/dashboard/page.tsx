@@ -116,8 +116,8 @@ export default function DashboardPage() {
     <div className="p-6 space-y-8">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-zinc-100">Dashboard</h1>
-        <p className="text-zinc-400">Track your election journey and stay informed</p>
+        <h1 className="text-3xl font-bold text-zinc-950 dark:text-zinc-100">Dashboard</h1>
+        <p className="text-zinc-600 dark:text-zinc-400">Track your election journey and stay informed</p>
       </div>
 
       {/* Stats Overview */}
@@ -158,14 +158,14 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-zinc-950/60 backdrop-blur-md border border-zinc-800 rounded-xl p-6"
+              className="bg-white/90 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-xl p-6"
             >
               <div className="flex items-center justify-between mb-4">
                 <Icon className={`w-8 h-8 ${stat.color}`} />
                 <TrendingUp className="w-4 h-4 text-zinc-500" />
               </div>
-              <div className="text-2xl font-bold text-zinc-100 mb-1">{stat.value}</div>
-              <div className="text-zinc-400 text-sm">{stat.title}</div>
+              <div className="text-2xl font-bold text-zinc-950 dark:text-zinc-100 mb-1">{stat.value}</div>
+              <div className="text-zinc-600 dark:text-zinc-400 text-sm">{stat.title}</div>
             </motion.div>
           );
         })}
@@ -192,16 +192,16 @@ export default function DashboardPage() {
                     <div className="flex items-center justify-between mb-4">
                       <Icon className={`w-6 h-6 ${
                         action.status === 'completed' ? 'text-green-500' :
-                        action.status === 'active' ? 'text-blue-500' : 'text-zinc-400'
+                        action.status === 'active' ? 'text-blue-500' : 'text-zinc-500 dark:text-zinc-400'
                       }`} />
                       {action.status === 'completed' && (
                         <CheckCircle2 className="w-4 h-4 text-green-500" />
                       )}
                     </div>
-                    <h3 className="text-lg font-semibold text-zinc-100 mb-2 group-hover:text-orange-500 transition-colors">
+                    <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-100 mb-2 group-hover:text-orange-500 transition-colors">
                       {action.title}
                     </h3>
-                    <p className="text-zinc-400 text-sm mb-4">{action.description}</p>
+                    <p className="text-zinc-600 dark:text-zinc-400 text-sm mb-4">{action.description}</p>
                     <div className="flex items-center text-orange-500 text-sm font-medium">
                       {action.status === 'completed' ? 'View Details' : 'Get Started'}
                       <ArrowRight className="w-4 h-4 ml-1" />
@@ -216,8 +216,8 @@ export default function DashboardPage() {
 
       {/* Election Timeline */}
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-zinc-100">Election Timeline</h2>
-        <div className="bg-zinc-950/60 backdrop-blur-md border border-zinc-800 rounded-xl p-6">
+        <h2 className="text-2xl font-bold text-zinc-950 dark:text-zinc-100">Election Timeline</h2>
+        <div className="bg-white/90 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-xl p-6">
           <div className="space-y-6">
             {[
               {
@@ -248,15 +248,15 @@ export default function DashboardPage() {
               <div key={index} className="flex items-start gap-4">
                 <div className="flex flex-col items-center">
                   <div className="w-3 h-3 rounded-full bg-orange-500 flex-shrink-0 mt-2" />
-                  {index < 3 && <div className="w-0.5 h-12 bg-zinc-800 mt-2" />}
+                  {index < 3 && <div className="w-0.5 h-12 bg-zinc-200 dark:bg-zinc-800 mt-2" />}
                 </div>
                 <div className="flex-1 pb-6">
                   <div className="flex items-center gap-3 mb-1">
                     <Calendar className="w-4 h-4 text-orange-500" />
                     <span className="text-orange-500 font-medium text-sm">{event.date}</span>
                   </div>
-                  <h3 className="text-lg font-semibold text-zinc-100 mb-1">{event.title}</h3>
-                  <p className="text-zinc-400 text-sm">{event.description}</p>
+                  <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-100 mb-1">{event.title}</h3>
+                  <p className="text-zinc-600 dark:text-zinc-400 text-sm">{event.description}</p>
                 </div>
               </div>
             ))}
@@ -266,23 +266,23 @@ export default function DashboardPage() {
 
       {/* Recent Activity */}
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-zinc-100">Recent Activity</h2>
-        <div className="bg-zinc-950/60 backdrop-blur-md border border-zinc-800 rounded-xl p-6">
+        <h2 className="text-2xl font-bold text-zinc-950 dark:text-zinc-100">Recent Activity</h2>
+        <div className="bg-white/90 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-xl p-6">
           <div className="space-y-4">
             {stats.chatCount > 0 ? (
-              <div className="flex items-center gap-4 p-4 bg-zinc-900/50 rounded-lg">
+              <div className="flex items-center gap-4 p-4 bg-zinc-100/70 dark:bg-zinc-900/50 rounded-lg">
                 <MessageSquare className="w-5 h-5 text-blue-500" />
                 <div className="flex-1">
-                  <div className="font-medium text-zinc-100">Chat with AI Assistant</div>
-                  <div className="text-zinc-400 text-sm">{stats.chatCount} conversation{stats.chatCount > 1 ? 's' : ''}</div>
+                  <div className="font-medium text-zinc-950 dark:text-zinc-100">Chat with AI Assistant</div>
+                  <div className="text-zinc-600 dark:text-zinc-400 text-sm">{stats.chatCount} conversation{stats.chatCount > 1 ? 's' : ''}</div>
                 </div>
                 <Clock className="w-4 h-4 text-zinc-500" />
               </div>
             ) : (
               <div className="text-center py-8">
-                <MessageSquare className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-zinc-100 mb-2">No Recent Activity</h3>
-                <p className="text-zinc-400 mb-4">Start your election journey by checking eligibility or chatting with our AI assistant.</p>
+                <MessageSquare className="w-12 h-12 text-zinc-500 dark:text-zinc-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-100 mb-2">No Recent Activity</h3>
+                <p className="text-zinc-600 dark:text-zinc-400 mb-4">Start your election journey by checking eligibility or chatting with our AI assistant.</p>
                 <Link href="/eligibility">
                   <button className="px-6 py-2 bg-orange-600 hover:bg-orange-500 text-white font-medium rounded-lg transition-colors">
                     Get Started

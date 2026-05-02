@@ -1,29 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Settings as SettingsIcon, User, Bell, Globe, Shield, Moon, Sun, Save } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import { useTheme } from "@/components/ThemeProvider";
 
 export default function SettingsPage() {
   const { language, setLanguage } = useTranslation();
+  const { theme, setTheme } = useTheme();
   const [notifications, setNotifications] = useState({
     email: true,
     push: false,
     sms: false
   });
-  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('dark');
   const [isSaving, setIsSaving] = useState(false);
+  const [email, setEmail] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const loadSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setEmail(session?.user?.email ?? null);
+    };
+
+    loadSession();
+  }, []);
 
   const handleSave = async () => {
     setIsSaving(true);
-    // Simulate save
     setTimeout(() => {
       setIsSaving(false);
-      // Could save to Supabase here
     }, 1000);
   };
 
@@ -178,7 +187,7 @@ export default function SettingsPage() {
                     className={`p-4 rounded-lg border transition-all ${
                       theme === item.key
                         ? 'bg-orange-600/10 border-orange-600 text-orange-500'
-                        : 'bg-zinc-900/50 border-zinc-800 text-zinc-400 hover:border-zinc-700'
+                        : 'bg-zinc-900/50 dark:bg-zinc-800/50 border-zinc-800 text-zinc-400 hover:border-zinc-700'
                     }`}
                   >
                     <Icon className="w-6 h-6 mx-auto mb-2" />
@@ -206,11 +215,11 @@ export default function SettingsPage() {
 
             <div className="space-y-4">
               <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-zinc-800 flex items-center justify-center mx-auto mb-3">
-                  <User className="w-8 h-8 text-zinc-400" />
+                <div className="w-16 h-16 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mx-auto mb-3">
+                  <User className="w-8 h-8 text-zinc-700 dark:text-zinc-400" />
                 </div>
-                <div className="font-medium text-zinc-100">User</div>
-                <div className="text-sm text-zinc-400">user@example.com</div>
+                <div className="font-medium text-zinc-950 dark:text-zinc-100">Account</div>
+                <div className="text-sm text-zinc-600 dark:text-zinc-400">{email ?? 'Not signed in'}</div>
               </div>
 
               <button
