@@ -123,8 +123,8 @@ export default function PollingBoothPage() {
                   ) : (
                     <Search className="h-4 w-4" />
                   )}
-                  Center map
-                </button>
+                Center map
+              </button>
                 <button
                   type="button"
                   onClick={() => {
@@ -138,13 +138,6 @@ export default function PollingBoothPage() {
                   Clear
                 </button>
               </div>
-                {isSearching ? (
-                  <span className="inline-flex h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                ) : (
-                  <Search className="h-4 w-4" />
-                )}
-                Center map
-              </button>
             </form>
 
             <div className="mt-4 rounded-3xl border border-orange-500/10 bg-black/60 px-5 py-4 text-sm text-zinc-300">
